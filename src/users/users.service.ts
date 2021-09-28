@@ -12,6 +12,8 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '../jwt/jwt.service';
 import { EditProfileInput } from './dtos/edit-profile.dto';
 import { Verification } from './entities/verification.entity';
+import { VerifyEmailOutput } from './dtos/verify-email.dto';
+import { UserProfileOutput } from './dtos/user-profile.dto';
 
 @Injectable()
 export class UsersService {
@@ -22,6 +24,7 @@ export class UsersService {
     private readonly verification: Repository<Verification>,
     private readonly jwtService: JwtService,
   ) {}
+
   async createAccount({
     email,
     password,
@@ -47,6 +50,7 @@ export class UsersService {
       return { ok: false, error: "Couldn't create account" };
     }
   }
+
   async login({ email, password }: LoginInput): Promise<LoginOutput> {
     // find the user with the email
     // check if the password is correct
@@ -84,9 +88,19 @@ export class UsersService {
       };
     }
   }
-  async findById(id: number): Promise<User> {
-    return this.users.findOne({ id });
+
+  async findById(id: number): Promise<UserProfileOutput> {
+    try {
+      const user = this.users.findOneOrFail({ id });
+      return {
+        ok: true,
+        user: user,
+      };
+    } catch (error) {
+      return { ok: false, error: 'User Not Found' };
+    }
   }
+
   async editProfile(userId: number, { email, password }: EditProfileInput) {
     const user = await this.users.findOne(userId);
     if (email) {
@@ -100,17 +114,20 @@ export class UsersService {
     return this.users.save(user);
   }
 
-  async verifyEmail(code: string): Promise<boolean> {
-    const verifycation = await this.verification.findOne(
-      { code },
-      // { loadRelationIds: true },
-      { relations: ['user'] },
-    );
-    if (verifycation) {
-      verifycation.user.verified = true;
-      delete verifycation.user.password;
-      this.users.save(verifycation.user);
+  async verifyEmail(code: string): Promise<VerifyEmailOutput> {
+    try {
+      const verifycation = await this.verification.findOne(
+        { code },
+        { relations: ['user'] },
+      );
+      if (verifycation) {
+        verifycation.user.verified = true;
+        this.users.save(verifycation.user);
+        return { ok: true, error: null };
+      }
+      return { ok: false, error: 'Verification not found.' };
+    } catch (error) {
+      return { ok: false };
     }
-    return false;
   }
 }
