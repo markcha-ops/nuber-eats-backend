@@ -9,6 +9,7 @@ import { UsersService } from '../users/users.service';
 export class JwtModule {
   static forRoot(options: JwtModuleOptions): DynamicModule {
     return {
+      
       module: JwtModule, // 모듈이 서비스를 제공한다.
       exports: [JwtService],
       providers: [

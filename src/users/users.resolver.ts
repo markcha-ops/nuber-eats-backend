@@ -28,6 +28,7 @@ export class UsersResolver {
   async userProfile(
     @Args() { userId }: UserProfileInput,
   ): Promise<UserProfileOutput> {
+    
     const { ok, user } = await this.usersService.findById(userId);
     return {
       ok,

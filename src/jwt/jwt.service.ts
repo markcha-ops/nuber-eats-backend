@@ -8,7 +8,6 @@ export class JwtService {
   constructor(
     @Inject(CONFIG_OPTIONS) private readonly options: JwtModuleOptions,
   ) {
-    console.log(options);
   }
   // eslint-disable-next-line @typescript-eslint/ban-types
   sign(userId: number): string {

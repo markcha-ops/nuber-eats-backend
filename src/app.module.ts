@@ -39,6 +39,7 @@ import { Verification } from './users/entities/verification.entity';
         DB_USERNAME: Joi.string().required(),
         DB_PSSWORD: Joi.string().required(),
         DB_NAME: Joi.string().required(),
+        // https://randomkeygen.com/ -> CodeIgniter Encryption Keys 
         PRIVATE_KEY: Joi.string().required(),
       }),
     }),
