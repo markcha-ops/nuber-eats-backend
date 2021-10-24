@@ -119,11 +119,12 @@ export class UsersService {
     try {
       const verifycation = await this.verification.findOne(
         { code },
-        { relations: ['user'] },
+        { relations: ['user'] }, 
       );
       if (verifycation) {
         verifycation.user.verified = true;
-        this.users.save(verifycation.user);
+        await this.users.save(verifycation.user);
+        await this.verification.delete(verifycation.id);
         return { ok: true, error: null };
       }
       return { ok: false, error: 'Verification not found.' };
