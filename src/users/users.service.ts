@@ -26,18 +26,18 @@ export class UsersService {
   ) {}
 
   async createAccount({
-    email,
+    username,
     password,
-    role,
+    email,
   }: CreateAccountInput): Promise<CreateAccountOutput> {
     // check new user
     // create user & hash the pasword
     try {
-      const exists = await this.users.findOne({ email });
+      const exists = await this.users.findOne({ username });
       if (exists) {
-        return { ok: false, error: 'There is a user with that email already' };
+        return { ok: false, error: 'There is a user with that username already' };
       }
-      const user = this.users.create({ email, password, role });
+      const user = this.users.create({ username, password, email });
       await this.users.save(user);
       await this.verification.save(
         this.verification.create({
@@ -51,13 +51,13 @@ export class UsersService {
     }
   }
 
-  async login({ email, password }: LoginInput): Promise<LoginOutput> {
-    // find the user with the email
+  async login({ username, password }: LoginInput): Promise<LoginOutput> {
+    // find the user with the username
     // check if the password is correct
     // make a JWT and give it to the user
     try {
       const user = await this.users.findOne(
-        { email },
+        { username },
         { select: ['password', 'id'] },
       );
       if (!user) {
@@ -102,10 +102,10 @@ export class UsersService {
     }
   }
 
-  async editProfile(userId: number, { email, password }: EditProfileInput) {
+  async editProfile(userId: number, { username, password }: EditProfileInput) {
     const user = await this.users.findOne(userId);
-    if (email) {
-      user.email = email;
+    if (username) {
+      user.username = username;
       user.verified = false;
       await this.verification.create();
     }

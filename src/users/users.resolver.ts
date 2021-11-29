@@ -8,13 +8,14 @@ import {
 } from './dtos/create-account.dto';
 import { LoginInput, LoginOutput } from './dtos/login.dto';
 import { AuthGuard } from '../auth/auth.guard';
-import { UseGuards } from '@nestjs/common';
+import { Controller, Post, UseGuards } from '@nestjs/common';
 import { AuthUser } from '../auth/auth-user.decorator';
 import { UserProfileInput, UserProfileOutput } from './dtos/user-profile.dto';
 import { EditProfileInput, EditProfileOutput } from './dtos/edit-profile.dto';
 import { VerifyEmailInput, VerifyEmailOutput } from './dtos/verify-email.dto';
 
 @Resolver((of) => User)
+@Controller('api')
 export class UsersResolver {
   constructor(private readonly usersService: UsersService) {}
 
@@ -58,7 +59,8 @@ export class UsersResolver {
     }
   }
 
-  @Mutation((returns) => LoginOutput)
+  @Post()
+  // @Mutation((returns) => LoginOutput)
   async login(@Args('input') loginInput: LoginInput): Promise<LoginOutput> {
     try {
       const { ok, error, token } = await this.usersService.login(loginInput);

@@ -1,0 +1,13 @@
+[
+  {
+    "name": "default",
+    "type": "mysql",
+    "host": "database-mysql.cyt8fp0mealu.ap-northeast-2.rds.amazonaws.com",
+    "port": 3721,
+    "username": "admin",
+    "password": "vetec3721",
+    "database": "",
+    "synchronize": false,
+    "entities": ["entities/*.js"]
+  }
+]

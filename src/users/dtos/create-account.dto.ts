@@ -10,9 +10,9 @@ import { CoreOutput } from '../../common/dtos/ouput.dto';
 
 @InputType()
 export class CreateAccountInput extends PickType(User, [
-  'email',
+  'username',
   'password',
-  'role',
+  'email'
 ]) {}
 @ObjectType()
 export class CreateAccountOutput extends CoreOutput {}

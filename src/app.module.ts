@@ -20,6 +20,28 @@ import { AuthModule } from './auth/auth.module';
 import { Verify } from 'crypto';
 import { Verification } from './users/entities/verification.entity';
 import { MailModule } from './mail/mail.module';
+import { LoggedIn } from './users/entities/LoggedIn';
+import { PermissionUser } from './users/entities/PermissionUser';
+import { Roles } from './users/entities/Roles';
+import { Companies } from './users/entities/Companies';
+import { Workplace } from './users/entities/Workplace';
+import { Users } from './users/entities/Users';
+import { Energy } from './users/entities/Energy';
+import { Agent } from 'http';
+import { AgentSerialConnector } from './users/entities/AgentSerialConnector';
+import { AgentTcpConnector } from './users/entities/AgentTcpConnector';
+import { Equipment } from './users/entities/Equipment';
+import { EquipSerialConnector } from './users/entities/EquipSerialConnector';
+import { FacilityType } from './users/entities/FacilityType';
+import { GovernmentProjects } from './users/entities/GovernmentProjects';
+import { LocationData } from './users/entities/LocationData';
+import { LocationInfo } from './users/entities/LocationInfo';
+import { MachbaseTag } from './users/entities/MachbaseTag';
+import { Metrics } from './users/entities/Metrics';
+import { MetricsVersion } from './users/entities/MetricsVersion';
+import { NoderedFunction } from './users/entities/NoderedFunction';
+import { Permissions } from './users/entities/Permissions';
+import { UsersController } from './users/users.controller';
 
 @Module({
   imports: [
@@ -48,7 +70,7 @@ import { MailModule } from './mail/mail.module';
       }),
     }),
     TypeOrmModule.forRoot({
-      type: 'postgres',
+      type: 'mysql',
       host: process.env.DB_HOST,
       port: +process.env.DB_PORT,
       username: process.env.DB_USERNAME,
@@ -69,23 +91,11 @@ import { MailModule } from './mail/mail.module';
       domain:process.env.MAILGUN_DOMAIN_NAME
     }),
   ],
-  controllers: [],
+  controllers: [UsersController],
   providers: [],
 })
 // export class AppModule {
 // 미들 웨어를 원하는 경로 라우팅
-export class AppModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(JwtMiddleware)
-      // 특정 url 경로에 제외 시키기 위해서 적용
-      .exclude({
-        path: '/api',
-        method: RequestMethod.ALL,
-      })
-      .forRoutes({
-        path: '/graphql',
-        method: RequestMethod.ALL,
-      });
-  }
+export class AppModule  {
+
 }
